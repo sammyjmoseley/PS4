@@ -19,13 +19,22 @@ module Core = struct
       | Zero::t -> One(x)::t
       | (One h)::t -> Zero::(cons_helper (Node (x, h)) t) in
     cons_helper (Leaf x) l
-  let decons l     =  failwith "TODO"
-    (* let rec decons_helper l =
+  let decons l     = 
+    let rec decons_helper l =
       match l with
       | [] -> None
       | Zero::t ->
-      | One(Leaf x)::t -> (Leaf x, Zero::t)
-      | One(Node (l, r)) -> (l,) *)
+        (match decons_helper t with
+        | None -> None
+        | Some (Leaf x, t) -> Some (Leaf x, t)
+        | Some (Node(l,r), t) -> Some (l, One(r)::t))
+      | One(Leaf x)::t -> Some (Leaf x, Zero::t)
+      | One(Node (l, r))::t -> Some (l, One(r)::t) in
+    match decons_helper l with
+    | None -> None
+    | Some (Leaf x, [Zero]) -> Some (x, [])
+    | Some (Leaf x, t) -> Some (x, t)
+    | _ -> failwith "error"
 
   let rec lookup l n   = failwith "TODO"
 
