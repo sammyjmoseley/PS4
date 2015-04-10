@@ -11,7 +11,9 @@ module Core = struct
   let rep_ok l     = failwith "TODO"
 
   let equals l l'  = failwith "TODO"
+
   let empty        = (* TODO *) []
+
   let cons x l     = 
     let rec cons_helper x l = 
       match l with
@@ -39,6 +41,7 @@ module Core = struct
   let rec lookup l n   = failwith "TODO"
 
   let update l n x = failwith "TODO"
+  
   let length l     = failwith "TODO"
 end
 
