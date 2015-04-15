@@ -47,12 +47,31 @@ module Core = struct
   	| _ -> false
 
   let rec lookup l n   = 
-  	if l=[] then
-  		None
-  	else
-  		match decons l with
-  		| Some(h,t) -> if n=0 then Some h else lookup t (n-1)
-  		| _ -> None
+  	let (^) a b = int_of_float ((float_of_int a) ** (float_of_int b)) in
+  	let rec eleNum l n (a, b) = (*returns (num elements, n)*)
+  		match l with
+  		| [] -> None
+  		| Zero::t ->
+  			eleNum t n (a+1, b)
+  		| One(x)::t ->
+  			let c = 2^a in
+  			let (a', b') = (a+1, c+b) in
+  			if n<b' then
+  				Some (c, x)
+  			else
+  				eleNum t n (a', b') in
+  	let rec travTree t d n =
+  		match t with
+  		| Leaf x -> x
+  		| Node(l, r) ->
+  			let d' = d/2
+  			if n<d' then
+  				travTree l d' n
+  			else
+  				travTree r d' n in
+  	match eleNum l n (0, 0) with
+  	| None -> None
+  	| Some (n', t) -> Some travTree t n' n
 
 
   let rec update l n x =
