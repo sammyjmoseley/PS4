@@ -10,11 +10,7 @@ module Core = struct
 
   let rep_ok l     = failwith "TODO"
 
-  let equals l l'  =
-  	match (decons l, l') with
-  	| (Some(h, t), Some(h', t')) -> h=h' && (equals t t')
-  	| (None, None) -> true
-  	| _ -> false
+  
 
   let empty        = []
 
@@ -43,6 +39,12 @@ module Core = struct
     | Some (Leaf x, t) -> Some (x, t)
     | _ -> failwith "error"
 
+
+  let rec equals l l'  =
+  	match (decons l, decons l') with
+  	| (Some(h, t), Some(h', t')) -> (h=h') && (equals t t')
+  	| (None, None) -> true
+  	| _ -> false
 
   let rec lookup l n   = 
   	if l=[] then

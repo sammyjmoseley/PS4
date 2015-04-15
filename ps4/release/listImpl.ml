@@ -2,10 +2,10 @@
 module Core = struct
   type 'a t = 'a list
 
-  let equals l l'  = 
+  let rec equals l l'  = 
   	match (l, l') with
   	| ([], []) -> true
-  	| (h::t, h'::t') -> (h==t) && (equals t t')
+  	| (h::t, h'::t') -> (h=h') && (equals t t')
   	| _ -> false
   let empty        = []
 
@@ -16,17 +16,23 @@ module Core = struct
   	| [] -> None
   	| h::t -> Some (h, t)
 
-  let lookup l n   =
+  let rec lookup l n   =
   	match l with
   	| [] -> None
   	| h::t -> if n==0 then Some h else lookup t (n-1)
 
-  let update l n x =
+  let rec update l n x =
   	match l with
   	| [] -> None
-  	| h::t -> if n==0 then Some x::t else h::(update l (n-1) x)
+  	| h::t ->
+      if n=0 then
+        Some (cons x t)
+      else
+        match update t (n-1) x with
+        | Some y -> Some (cons x y)
+        | _ -> None
 
-  let length l     = 
+  let rec length l     = 
   	match l with
   	| [] -> 0
   	| h::t -> 1 + (length t)

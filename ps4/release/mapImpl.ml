@@ -14,28 +14,28 @@ module Core = struct
     IntMap.equal (=) l l'
   let empty        = (* TODO *) IntMap.empty
   let cons x l     = 
-    IntMap.add ((IntMap.cardinal l) + 1) x l
+    IntMap.add (IntMap.cardinal l) x l
   let decons l     =
     if IntMap.is_empty l then
       None
     else 
-      let n = IntMap.cardinal l
+      let n = IntMap.cardinal l in
       let x = IntMap.find n l in
       let l' = IntMap.remove n l in
       Some (x, l')
 
   let lookup l n   = 
-    if n>=(IntMap.cardinal l) then
+    if n>=(IntMap.cardinal l) || n<0 then
       None
     else
-      Some (IntMap.find (n+1) l)
+      Some (IntMap.find ((IntMap.cardinal l) - n -1) l)
   let update l n x = 
-    if n>=(IntMap.cardinal l) then
+    if n>=(IntMap.cardinal l) || n<0 then
       None
     else
-      Some (IntMap.add (n+1) x l)
+      Some (IntMap.add ((IntMap.cardinal l) - n -1) x l)
   let length l     = 
-    IntMap.cardinal
+    IntMap.cardinal l
 end
 
 include Core
