@@ -10,9 +10,13 @@ module Core = struct
 
   let rep_ok l     = failwith "TODO"
 
-  let equals l l'  = failwith "TODO"
+  let equals l l'  =
+  	match (decons l, l') with
+  	| (Some(h, t), Some(h', t')) -> h=h' && (equals t t')
+  	| (None, None) -> true
+  	| _ -> false
 
-  let empty        = (* TODO *) []
+  let empty        = []
 
   let cons x l     = 
     let rec cons_helper x l = 
@@ -21,6 +25,7 @@ module Core = struct
       | Zero::t -> One(x)::t
       | (One h)::t -> Zero::(cons_helper (Node (x, h)) t) in
     cons_helper (Leaf x) l
+
   let decons l     = 
     let rec decons_helper l =
       match l with
@@ -38,11 +43,36 @@ module Core = struct
     | Some (Leaf x, t) -> Some (x, t)
     | _ -> failwith "error"
 
-  let rec lookup l n   = failwith "TODO"
 
-  let update l n x = failwith "TODO"
+  let rec lookup l n   = 
+  	if l=[] then
+  		None
+  	else
+  		match decons l with
+  		| Some(h,t) -> if n=0 then Some h else lookup t (n-1)
+  		| _ -> None
+
+
+  let rec update l n x =
+  	if l=[] then
+  		None
+  	else
+  		match decons l with
+  		| Some(h, t) ->
+  			if n=0 then
+  				Some (cons x t)
+  			else
+  				(match update t (n-1) x with
+  				| Some y -> Some (cons x y)
+  				| _ -> None)
+  		| _ -> None
+
   
-  let length l     = failwith "TODO"
+  let rec length l     = 
+	match l with
+	| [] -> 0
+	| Zero::t -> 2*(length t)
+	| One(x)::t -> 1+2*(length t)
 end
 
 include Core
