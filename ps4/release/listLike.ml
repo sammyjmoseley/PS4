@@ -86,6 +86,122 @@ module Spec (C : CORE) = struct
 
   let equals_symmetry (l1,l2) = if equals l1 l2 then equals l2 l1 else test_passes
 
+  (** testing whether cons and decons have an inverse relationship*)
+  let cons_decons (x, l) = match decons (cons x l) with
+                           | None -> equals empty l
+                           |  Some (x', l') -> equals l l'
+
+  (** tests if length of empty list is 0*)
+  let empty_length = (length empty = 0)
+
+  (** tests if cons adds an element to the beginning of the list*)
+  let cons_first (x, l) = match lookup (cons x l) 0 with
+                          | None -> test_fails
+                          | Some a -> a = x
+
+  (** checks if cons only increases list length by one *)
+  let cons_length (x, l) = (length l) + 1 = length (cons x l)
+
+  (** checks if decons on an empty list returns None *)
+  let decons_empty = (decons empty = None)
+
+  (** checks if decons decreases list length by one *)
+  let decons_length l = 
+    let l' = match decons l with
+    | None -> l (** what do i do here? i could expect a non-empty list*)
+    | Some (h, tl) -> tl in
+    length l - 1 = length l'
+
+  (** checks if decons takes away the first element of the list *)
+  let decons_first (x, l) = match decons (cons x l) with
+                           | None -> equals empty l
+                           |  Some (x', l') -> x = x'
+
+  (** checks if decons a list of length 1 returns the empty list
+      Requires: l has length 1*)
+  let decons_one l = 
+    match decons l with
+    | None -> test_fails 
+    | Some (x', l') -> equals l' empty
+
+  (** checks if lookup returns None if the index is greater than or equal to the size of the input list *)
+  let lookup_bounds l = match lookup l (length l) with
+                        | None -> test_passes
+                        | Some a -> test_fails
+
+  (** checks if lookup returns None if the index specified is negative *)
+  let lookup_negative l = match lookup l (-1) with
+                          | None -> test_passes
+                          | Some a -> test_fails
+
+  (** checks if update returns None if the index is greater than or equal to the size of the input list *)
+  let update_bounds (x, l) = match update l (length l) x with
+                             | None -> test_passes
+                             | Some a -> test_fails
+
+  (** checks if update returns None if the index specified is negative *)
+  let update_negative (x, l) = match update l (-1) x with
+                          | None -> test_passes
+                          | Some a -> test_fails
+
+  (** Checks if update doesn't change the size of the list 
+      Requires (length l) >= 1*)
+  let update_length (x, l) = match update l 0 x with
+                             | None -> test_fails
+                             | Some l' -> length l = length l'
+
+  (** Checks if updating a single element to the same value doesn't change the list
+      Requires (length l) >= 1*)
+  let update_nothing l = 
+    let first = match lookup l 0 with
+                | None -> failwith "empty list"
+                | Some a -> a in
+    match update l 0 first with
+    | None -> test_fails
+    | Some l' -> equals l l'
+
+
+
+
+
+
+
+
+
+
+(** 
+equals - list of different lengths (same list, all but last character) shouldn't be equal
+          list of same elements but different order, shouldn't be equal
+
+empty - length is 0. DONE
+
+cons -
+check that cons actually adds shit to the beginning of the list. (using lookup) DONE
+add 2 things on list and make sure that they come out in order.
+cons an element -> length + 1 DONE
+
+decons - decons a list of length one: get an empty list. DONE
+decons actually takes away first element of list. using cons DONE
+decons an element -> length - 1 ALMOST
+decons an empty list should return None. DONE
+
+cons and decons have an inverse relationship. DONE
+
+lookup & update - negative input. out of bounds input. DONE
+               
+lookup -    
+lookup 1, after deconsing something, lookup 0 should be some as lookup 1 from b4.
+
+update - lookup before and after update and it should change to new value.
+        update shouldn't change length of list. DONE
+
+
+length -
+
+
+ *)
+
+
   (** TODO: additional tests *)
 
   (****************************************************************************)
@@ -117,14 +233,43 @@ module Spec (C : CORE) = struct
   let arb_listlike_pair : (char C.t * char C.t) Arbitrary.t =
     Arbitrary.pair arb_listlike arb_listlike
 
+  let arb_value_listlike : (char * char C.t) Arbitrary.t = 
+    Arbitrary.pair Arbitrary.alpha arb_listlike
+
+  let arb_value_listlike_len (n : int) : (char * char C.t) Arbitrary.t = 
+    Arbitrary.pair Arbitrary.alpha (arb_listlike_len n)
+
   (** TODO: additional generators if needed *)
 
   (****************************************************************************)
   (** Tests *******************************************************************)
   (****************************************************************************)
 
-  TEST_UNIT "equals_self"     = assert_qcheck arb_listlike      equals_self
-  TEST_UNIT "equals_symmetry" = assert_qcheck arb_listlike_pair equals_symmetry
+  TEST_UNIT "equals_self"     = assert_qcheck arb_listlike                equals_self
+  TEST_UNIT "equals_symmetry" = assert_qcheck arb_listlike_pair           equals_symmetry
+
+
+  TEST_UNIT "cons_decons"     = assert_qcheck arb_value_listlike          cons_decons
+
+
+  TEST_UNIT "empty_length"    = assert_true                               empty_length
+  TEST_UNIT "cons_first"      = assert_qcheck arb_value_listlike          cons_first
+  TEST_UNIT "cons_length"     = assert_qcheck arb_value_listlike          cons_length
+  TEST_UNIT "decons_empty"    = assert_true                               decons_empty
+  TEST_UNIT "decons_length"   = assert_qcheck (arb_listlike_len 4)        decons_length
+  TEST_UNIT "decons_first"    = assert_qcheck (arb_value_listlike)        decons_first
+  TEST_UNIT "decons_one"      = assert_qcheck (arb_listlike_len 1)        decons_one
+  TEST_UNIT "lookup_bounds"   = assert_qcheck arb_listlike                lookup_bounds
+  TEST_UNIT "lookup_negative" = assert_qcheck arb_listlike                lookup_negative
+  TEST_UNIT "update_bounds"   = assert_qcheck arb_value_listlike          update_bounds
+  TEST_UNIT "update_negative" = assert_qcheck arb_value_listlike          update_negative
+  TEST_UNIT "update_length"   = assert_qcheck (arb_value_listlike_len 4)  update_length
+  TEST_UNIT "update_nothing"  = assert_qcheck (arb_listlike_len 2)        update_nothing
+
+
+
+
+
 
   (** TODO: additional tests *)
 
