@@ -20,8 +20,8 @@ module Core = struct
       None
     else 
       let n = IntMap.cardinal l in
-      let x = IntMap.find n l in
-      let l' = IntMap.remove n l in
+      let x = IntMap.find (n-1) l in
+      let l' = IntMap.remove (n-1) l in
       Some (x, l')
 
   let lookup l n   = 

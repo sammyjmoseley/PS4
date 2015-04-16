@@ -1,0 +1,1 @@
+module PerformanceTest (C : Core)
