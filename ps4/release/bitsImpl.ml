@@ -64,14 +64,14 @@ module Core = struct
   		match t with
   		| Leaf x -> x
   		| Node(l, r) ->
-  			let d' = d/2
+  			let d' = d/2 in
   			if n<d' then
   				travTree l d' n
   			else
   				travTree r d' n in
   	match eleNum l n (0, 0) with
   	| None -> None
-  	| Some (n', t) -> Some travTree t n' n
+  	| Some (n', t) -> Some (travTree t n' n)
 
 
   let rec update l n x =
