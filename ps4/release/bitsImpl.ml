@@ -48,7 +48,7 @@ module Core = struct
 
   let rec lookup l n   = 
   	let (^) a b = int_of_float ((float_of_int a) ** (float_of_int b)) in
-  	let rec eleNum l n (a, b) = (*returns (num elements, n)*)
+  	let rec eleNum l n (a, b) =
   		match l with
   		| [] -> None
   		| Zero::t ->
@@ -68,7 +68,7 @@ module Core = struct
   			if n<d' then
   				travTree l d' n
   			else
-  				travTree r d' n in
+  				travTree r d' (n-d') in
   	match eleNum l n (0, 0) with
   	| None -> None
   	| Some (n', t) -> Some (travTree t n' n)
