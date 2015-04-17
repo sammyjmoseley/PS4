@@ -32,12 +32,13 @@ module Core = struct
         | Some (Leaf x, t) -> Some (Leaf x, t)
         | Some (Node(l,r), t) -> Some (l, One(r)::t))
       | One(Leaf x)::t -> Some (Leaf x, Zero::t)
-      | One(Node (l, r))::t -> Some (l, One(r)::t) in
+      | One(Node (l, r))::t -> Some (l, One(r)::Zero::t) in
     match decons_helper l with
     | None -> None
     | Some (Leaf x, [Zero]) -> Some (x, [])
     | Some (Leaf x, t) -> Some (x, t)
     | _ -> failwith "error"
+
 
 
   let rec equals l l'  =
@@ -62,7 +63,7 @@ module Core = struct
   				eleNum t n (a', b') in
   	let rec travTree t d n =
   		match t with
-  		| Leaf x -> x
+  		| Leaf x -> if n=0 then Some x else None
   		| Node(l, r) ->
   			let d' = d/2 in
   			if n<d' then
@@ -71,7 +72,7 @@ module Core = struct
   				travTree r d' (n-d') in
   	match eleNum l n (0, 0) with
   	| None -> None
-  	| Some (n', t) -> Some (travTree t n' n)
+  	| Some (n', t) -> travTree t n' n
 
 
   let rec update l n x =

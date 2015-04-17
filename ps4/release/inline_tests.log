@@ -1,0 +1,32 @@
+File "listLike.ml", line 248, characters 2-85: equals_self
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 249, characters 2-89: equals_symmetry
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 252, characters 2-85: cons_decons
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 255, characters 2-86: empty_length
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 256, characters 2-84: cons_first
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 257, characters 2-85: cons_length
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 258, characters 2-86: decons_empty
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 259, characters 2-87: decons_length
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 260, characters 2-86: decons_first
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 261, characters 2-84: decons_one
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 262, characters 2-87: lookup_bounds
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 263, characters 2-89: lookup_negative
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 264, characters 2-87: update_bounds
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 265, characters 2-89: update_negative
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 266, characters 2-87: update_length
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
+File "listLike.ml", line 267, characters 2-88: update_nothing
+  in TEST_MODULE at file "bitsImpl.ml", line 103, characters 0-55: BitsImpl Spec tests
