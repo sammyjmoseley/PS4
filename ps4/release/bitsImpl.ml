@@ -8,7 +8,22 @@ module Core = struct
 
   type 'a t = 'a bitlist
 
-  let rep_ok l     = failwith "TODO"
+  let rep_ok l     =
+  	let rec rep_ok_helper l n =
+  		let rec tree_depth t =
+  			match t with
+  			| Leaf(x) -> Some 0
+  			| Node(l, r) ->
+  				(match (tree_depth l, tree_depth r) with
+  				| (Some x, Some y) -> if x=y then Some (x+1) else None
+  				| _ -> None) in
+  		match l with
+  		| [] -> true
+  		| Zero::t -> rep_ok_helper t (n+1)
+  		| One(h)::t -> (match tree_depth h with
+  						| None -> false
+  						| Some x -> x=n) && rep_ok_helper t (n+1) in
+  	rep_ok_helper l 0
 
   
 

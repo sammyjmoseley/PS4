@@ -8,7 +8,13 @@ module IntMap = Map.Make(Ints)
 module Core = struct
   type 'a t = 'a IntMap.t
 
-  let rep_ok l = failwith "TODO"
+  let rep_ok l = 
+    let rec rep_ok_helper l n = 
+      if n < (IntMap.cardinal l) then
+        (IntMap.mem n l) && (rep_ok_helper l (n+1))
+      else 
+        true in
+    rep_ok_helper l 0
 
   let equals l l'  = 
     IntMap.equal (=) l l'
